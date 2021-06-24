@@ -5,8 +5,9 @@ using UnityEngine;
 public class BoatMovement : MonoBehaviour
 {
     [SerializeField] private Rigidbody boatRigidbody;
-    [SerializeField] private float speed;
-    [SerializeField] private Vector3 lastPosition;
+    [SerializeField] private float speed = 5;
+    [SerializeField] private float axeleration = 2;
+    private float currentSpeed = 0;
 
     private void Update()
     {
@@ -18,21 +19,18 @@ public class BoatMovement : MonoBehaviour
     {
         var vertical = Input.GetAxis("Vertical");
         var horizontal = Input.GetAxis("Horizontal");
-
         if (vertical == 0 && horizontal == 0) return;
-        var direction = (lastPosition - boatRigidbody.transform.position);
-        boatRigidbody.transform.LookAt(direction + boatRigidbody.transform.position);
-        var t = boatRigidbody.position;
-        t.y = 0;
-        boatRigidbody.position = t;
-        lastPosition = boatRigidbody.transform.position;
+        var vector = new Vector3(horizontal, 0, vertical) * speed;
+        boatRigidbody.transform.LookAt(boatRigidbody.position + vector.normalized);
     }
 
     private void Move()
     {
         var vertical = Input.GetAxis("Vertical");
         var horizontal = Input.GetAxis("Horizontal");
-        var vector = new Vector3(horizontal, 0, vertical);
-        boatRigidbody.velocity = vector.normalized * speed;
+
+        var vector = new Vector3(horizontal, 0, vertical).normalized;
+
+        boatRigidbody.velocity = vector * speed;
     }
 }
