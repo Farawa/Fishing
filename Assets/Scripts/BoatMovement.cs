@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class BoatMovement : MonoBehaviour
 {
-    [SerializeField] private Rigidbody boatRigidbody;
+    private Rigidbody boatRigidbody;
     [SerializeField] private float speed = 5;
-    [SerializeField] private float axeleration = 2;
-    private float currentSpeed = 0;
+    //[SerializeField] private float axeleration = 2;
+
+    private void Awake()
+    {
+        boatRigidbody = GetComponent<Rigidbody>();
+    }
 
     private void Update()
     {

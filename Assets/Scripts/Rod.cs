@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Rod : MonoBehaviour
 {
-    [HideInInspector] public bool isFree = true;
+    public bool isFree { get; private set; } = true;
     [SerializeField] private Material lineMaterial;
     [SerializeField] private Transform lineSource;
     [SerializeField] private float lineWidth = 0.03f;
+    public Fish currentFish;
     private Transform lineTarget;
     private LineRenderer lineRenderer;
     private Transform zeroPosition;
@@ -15,6 +16,8 @@ public class Rod : MonoBehaviour
     private void Start()
     {
         zeroPosition = BoatFishing.instance.transform;
+        CreateLine();
+        lineRenderer.enabled = false;
     }
 
     public void PullFish(Fish target, float maxDistance, float catchPower)
@@ -24,31 +27,42 @@ public class Rod : MonoBehaviour
 
     private IEnumerator PullProcess(Fish fish, float maxDistance, float catchPower)
     {
+        isFree = false;
+        currentFish = fish;
         lineTarget = fish.transform;
-        CreateLine();
-        var progress = 0f;
-        var health = fish.health;
-        //fish.isPulling = true;
+        lineRenderer.enabled = true;
+        fish.pullingRodsCount++;
         while (true)
         {
-            progress += catchPower;
-            print("progress = " + progress + " / " + health);
-            if (progress>=health)
+            fish.catchProgress += catchPower * Time.deltaTime;
+            if (fish == null)
             {
-                BoatFishing.instance.CatchFish();
-                DestroyLine();
-                yield break;
+                lineRenderer.enabled = false;
+                break;
             }
             var distance = Vector3.Distance(zeroPosition.position, fish.transform.position);
             distance -= 0.5f;//this is fix magic number :/
-            print("distance betwen boat and fish = " + distance);
             if (distance > maxDistance)
             {
-                //fish.isPulling = false;
-                DestroyLine();
+                fish.pullingRodsCount--;
+                lineRenderer.enabled = false;
+                break;
             }
-            yield return new WaitForFixedUpdate();
+            lineRenderer.SetPosition(0, lineSource.position);
+            lineRenderer.SetPosition(1, lineTarget.position);
+            yield return null;
         }
+        isFree = true;
+        currentFish = null;
+    }
+
+    public void StopPull()
+    {
+        currentFish.pullingRodsCount--;
+        lineRenderer.enabled = false;
+        isFree = true;
+        currentFish = null;
+        StopAllCoroutines();
     }
 
     private void CreateLine()
@@ -60,24 +74,5 @@ public class Rod : MonoBehaviour
         lineRenderer.endWidth = lineWidth;
         lineRenderer.useWorldSpace = true;
         lineRenderer.numCapVertices = 5;
-        StartCoroutine(UpdateLine());
-        isFree = false;
-    }
-
-    private IEnumerator UpdateLine()
-    {
-        while (true)
-        {
-            lineRenderer.SetPosition(0, lineSource.position);
-            lineRenderer.SetPosition(1, lineTarget.position);
-            yield return null;
-        }
-    }
-
-    private void DestroyLine()
-    {
-        StopAllCoroutines();
-        Destroy(lineRenderer);
-        isFree = true;
     }
 }

@@ -9,25 +9,26 @@ public class BoatFishing : MonoBehaviour
     [SerializeField] private Rod[] rods;
     [SerializeField] private float maxCatchDistance = 5;
     [SerializeField] private float catchPower = 10;
-    private SphereCollider collider;
+    [SerializeField] private int maxRodsPerFish = 2;
+    [SerializeField] private FishingHelper fishingHelper;
+    private BoatManager boatManager;
 
     private void Awake()
     {
-        collider = GetComponent<SphereCollider>();
-        collider.radius = maxCatchDistance;
         if (instance == null)
             instance = this;
         else
-            throw new System.Exception("больше 1го кораблика");
+            throw new System.Exception();
+        boatManager = GetComponent<BoatManager>();
+        fishingHelper.SetColliderSize(maxCatchDistance);
     }
 
     private void OnTriggerStay(Collider collision)
     {
-        print("кого-то нашел: " + collision.transform.name);
         if (collision.gameObject.tag == "Fish")
         {
             var fish = collision.gameObject.GetComponent<Fish>();
-            if (!fish.isPulling)
+            if (fish.pullingRodsCount < maxRodsPerFish && boatManager.GetIsCanStartCatchFish(fish))
             {
                 var rod = GetFreeRod();
                 if (rod != null)
@@ -36,6 +37,31 @@ public class BoatFishing : MonoBehaviour
                     print("start pool");
                 }
             }
+        }
+    }
+
+    public void UpdateRods()
+    {
+        var isHaveOnePullRod = false;
+        foreach (var rod in rods)
+        {
+            if (!rod.isFree)
+            {
+                if (!boatManager.GetIsCanStartCatchFish(rod.currentFish))
+                {
+                    rod.StopPull();
+                    print("pull stoped");
+                }
+                else
+                {
+                    isHaveOnePullRod = true;
+                }
+            }
+        }
+        if (!isHaveOnePullRod)
+        {
+            //TODO
+            print("Хранилище полное");
         }
     }
 
@@ -49,8 +75,9 @@ public class BoatFishing : MonoBehaviour
         return null;
     }
 
-    public void CatchFish()
+    public void CatchFish(Fish fish)
     {
-        print("fish catched");
+        boatManager.AddFish(fish);
+        fish.DestroySelf();
     }
 }
