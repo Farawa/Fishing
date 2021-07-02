@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class BoatStorage : MonoBehaviour
 {
-    [SerializeField] private float maxCapacity = 100;
+    
     private List<FishInStorage> fishList = new List<FishInStorage>();
     public float moneyCost { get; private set; } = 0;
     public float currentWeight { get; private set; } = 0;
-    public float MaxCapacity { get { return maxCapacity; } }
+    public float maxCapacity { get { return BoatManager.instance.maxFishCapacity; } }
 
     public void AddFish(Fish fish)
     {

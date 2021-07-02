@@ -7,11 +7,10 @@ public class BoatFishing : MonoBehaviour
     public static BoatFishing instance = null;
 
     [SerializeField] private Rod[] rods;
-    [SerializeField] private float maxCatchDistance = 5;
-    [SerializeField] private float catchPower = 10;
-    [SerializeField] private int maxRodsPerFish = 2;
     [SerializeField] private FishingHelper fishingHelper;
-    private BoatManager boatManager;
+    public float catchPower { get { return BoatManager.instance.catchPower; } }
+    public float maxCatchDistance { get { return BoatManager.instance.maxCatchDistance; } }
+    public int maxRodsPerFish { get { return BoatManager.instance.maxRodsPerFish; } }
 
     private void Awake()
     {
@@ -19,7 +18,6 @@ public class BoatFishing : MonoBehaviour
             instance = this;
         else
             throw new System.Exception();
-        boatManager = GetComponent<BoatManager>();
         fishingHelper.SetColliderSize(maxCatchDistance);
     }
 
@@ -28,7 +26,7 @@ public class BoatFishing : MonoBehaviour
         if (collision.gameObject.tag == "Fish")
         {
             var fish = collision.gameObject.GetComponent<Fish>();
-            if (fish.pullingRodsCount < maxRodsPerFish && boatManager.GetIsCanStartCatchFish(fish))
+            if (fish.pullingRodsCount < maxRodsPerFish && BoatManager.instance.GetIsCanStartCatchFish(fish))
             {
                 var rod = GetFreeRod();
                 if (rod != null)
@@ -47,7 +45,7 @@ public class BoatFishing : MonoBehaviour
         {
             if (!rod.isFree)
             {
-                if (!boatManager.GetIsCanStartCatchFish(rod.currentFish))
+                if (!BoatManager.instance.GetIsCanStartCatchFish(rod.currentFish))
                 {
                     rod.StopPull();
                     print("pull stoped");
@@ -77,7 +75,7 @@ public class BoatFishing : MonoBehaviour
 
     public void CatchFish(Fish fish)
     {
-        boatManager.AddFish(fish);
+        BoatManager.instance.AddFish(fish);
         fish.DestroySelf();
     }
 }

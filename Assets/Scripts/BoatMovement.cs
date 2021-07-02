@@ -5,8 +5,7 @@ using UnityEngine;
 public class BoatMovement : MonoBehaviour
 {
     private Rigidbody boatRigidbody;
-    [SerializeField] private float speed = 5;
-    //[SerializeField] private float axeleration = 2;
+    public float speed { get { return BoatManager.instance.boatSpeed; } }
 
     private void Awake()
     {
