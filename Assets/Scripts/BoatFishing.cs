@@ -18,6 +18,10 @@ public class BoatFishing : MonoBehaviour
             instance = this;
         else
             throw new System.Exception();
+    }
+
+    private void Start()
+    {
         fishingHelper.SetColliderSize(maxCatchDistance);
     }
 
@@ -38,6 +42,18 @@ public class BoatFishing : MonoBehaviour
         }
     }
 
+    public void SetRodsCount(int value)
+    {
+        for (int i = 0; i < value; i++)
+        {
+            rods[i].gameObject.SetActive(true);
+        }
+        for (int i = value; i < rods.Length; i++)
+        {
+            rods[i].gameObject.SetActive(false);
+        }
+    }
+
     public void UpdateRods()
     {
         var isHaveOnePullRod = false;
@@ -48,7 +64,6 @@ public class BoatFishing : MonoBehaviour
                 if (!BoatManager.instance.GetIsCanStartCatchFish(rod.currentFish))
                 {
                     rod.StopPull();
-                    print("pull stoped");
                 }
                 else
                 {
@@ -67,7 +82,7 @@ public class BoatFishing : MonoBehaviour
     {
         foreach (Rod rod in rods)
         {
-            if (rod.isFree)
+            if (rod.isFree&&rod.gameObject.activeSelf)
                 return rod;
         }
         return null;

@@ -10,7 +10,7 @@ public class BoatManager : MonoBehaviour
     [Space]
     public float catchPower = 10;
     public float maxFishCapacity = 100;
-    public float rodsCount = 6;
+    public int rodsCount = 6;
     public int maxRodsPerFish = 2;
     public float boatSpeed = 5;
     public float maxCatchDistance = 5;
@@ -30,6 +30,23 @@ public class BoatManager : MonoBehaviour
         storage = GetComponent<BoatStorage>();
     }
 
+    private void Start()
+    {
+        PlayerUpdates.instance.UpdateParameters();
+    }
+
+    public void UpdateImprovements(float power, float capacity, int rods, int rodsPerFish, float speed, float catchDistance, float health)
+    {
+        catchPower = power;
+        maxFishCapacity = capacity;
+        rodsCount = rods;
+        maxRodsPerFish = rodsPerFish;
+        boatSpeed = speed;
+        maxCatchDistance = catchDistance;
+        maxHealth = health;
+        BoatFishing.instance.SetRodsCount(rodsCount);
+    }
+
     public bool GetIsCanStartCatchFish(Fish fish)
     {
         return storage.currentWeight + fish.weight <= maxFishCapacity ? true : false;
@@ -45,5 +62,10 @@ public class BoatManager : MonoBehaviour
     {
         playerMoney += storage.moneyCost;
         storage.SetEmptyStorage();
+    }
+
+    public void TakeDamage(float value)
+    {
+        currentHealth -= value;
     }
 }

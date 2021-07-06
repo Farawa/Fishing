@@ -8,7 +8,7 @@ public class Rod : MonoBehaviour
     [SerializeField] private Material lineMaterial;
     [SerializeField] private Transform lineSource;
     [SerializeField] private float lineWidth = 0.03f;
-    public Fish currentFish;
+    [HideInInspector] public Fish currentFish;
     private Transform lineTarget;
     private LineRenderer lineRenderer;
     private Transform zeroPosition;
