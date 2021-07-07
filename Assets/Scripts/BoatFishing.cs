@@ -20,9 +20,9 @@ public class BoatFishing : MonoBehaviour
             throw new System.Exception();
     }
 
-    private void Start()
+    public void SetCatchDistance(float value)
     {
-        fishingHelper.SetColliderSize(maxCatchDistance);
+        fishingHelper.SetColliderSize(value);
     }
 
     private void OnTriggerStay(Collider collision)
@@ -36,7 +36,6 @@ public class BoatFishing : MonoBehaviour
                 if (rod != null)
                 {
                     rod.PullFish(fish, maxCatchDistance, catchPower);
-                    print("start pool");
                 }
             }
         }

@@ -1,12 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShopOpenButtlon : MonoBehaviour
+[RequireComponent (typeof(Button))]
+public class ShopClose : MonoBehaviour
 {
     [SerializeField] private GameObject shop;
+
     private void Awake()
     {
         GetComponent<Button>().onClick.AddListener(Click);
@@ -14,6 +14,6 @@ public class ShopOpenButtlon : MonoBehaviour
 
     private void Click()
     {
-        shop.SetActive(true);
+        shop.gameObject.SetActive(false);
     }
 }

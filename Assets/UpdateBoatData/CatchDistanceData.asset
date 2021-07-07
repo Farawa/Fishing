@@ -9,18 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 985eda0d510cd8d499c16e2a54203fd1, type: 3}
+  m_Script: {fileID: 11500000, guid: 630380b1105172a4880d953d0ace93e8, type: 3}
   m_Name: CatchDistanceData
   m_EditorClassIdentifier: 
-  distance:
-  - 5
-  - 5.5
-  - 6
-  - 6.5
-  - 7
-  - 7.5
-  - 8
-  - 8.5
-  - 9
-  - 9.5
-  - 10
+  parameterType: 5
+  currentLevel: 0
+  labelText: "\u0420\u0430\u0434\u0438\u0443\u0441 \u043E\u0431\u043D\u0430\u0440\u0443\u0436\u0435\u043D\u0438\u044F
+    \u0440\u044B\u0431\u044B"
+  array:
+  - value: 5
+    price: 0
+  - value: 6
+    price: 100
+  - value: 7
+    price: 100
+  - value: 8
+    price: 100
+  - value: 9
+    price: 100

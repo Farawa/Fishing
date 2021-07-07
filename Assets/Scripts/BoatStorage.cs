@@ -4,11 +4,20 @@ using UnityEngine;
 
 public class BoatStorage : MonoBehaviour
 {
-    
+    public static BoatStorage instance = null;
+
     private List<FishInStorage> fishList = new List<FishInStorage>();
     public float moneyCost { get; private set; } = 0;
     public float currentWeight { get; private set; } = 0;
     public float maxCapacity { get { return BoatManager.instance.maxFishCapacity; } }
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        else
+            throw new System.Exception();
+    }
 
     public void AddFish(Fish fish)
     {

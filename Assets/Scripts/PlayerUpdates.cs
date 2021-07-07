@@ -8,54 +8,7 @@ public class PlayerUpdates : MonoBehaviour
 
     [SerializeField] private BoatManager boat;
 
-    [SerializeField] private BoatPowerSO powerSO;
-    [SerializeField] private FishCapacitySO capacitySO;
-    [SerializeField] private RodsCountSO rodsCountSO;
-    [SerializeField] private RodsPerFishSO rodsPerFishSO;
-    [SerializeField] private BoatSpeedSO speedSO;
-    [SerializeField] private CatchDistanceSO distanceSO;
-    [SerializeField] private BoatHealthSO healthSO;
-
-    public int powerLevel
-    {
-        get { return Preffs.GetInt("RodsPowerLevel", 0); }
-        set { Preffs.SetInt("RodsPowerLevel", value); UpdateParameters(); }
-    }
-
-    public int capacityLevel
-    {
-        get { return Preffs.GetInt("BoatCapacityLevel", 0); }
-        set { Preffs.SetInt("BoatCapacityLevel", value); UpdateParameters(); }
-    }
-
-    public int rodsCountLevel
-    {
-        get { return Preffs.GetInt("RodsCountLevel", 0); }
-        set { Preffs.SetInt("RodsCountLevel", value); UpdateParameters(); }
-    }
-    public int rodsPerFishLevel
-    {
-        get { return Preffs.GetInt("RodsPerFishLevel", 0); }
-        set { Preffs.SetInt("RodsPerFishLevel", value); UpdateParameters(); }
-    }
-
-    public int speedLevel
-    {
-        get { return Preffs.GetInt("BoatSpeedLevel", 0); }
-        set { Preffs.SetInt("BoatSpeedLevel", value); UpdateParameters(); }
-    }
-
-    public int distanceLevel
-    {
-        get { return Preffs.GetInt("CatchDistanceLevel", 0); }
-        set { Preffs.SetInt("CatchDistanceLevel", value); UpdateParameters(); }
-    }
-
-    public int healthLevel
-    {
-        get { return Preffs.GetInt("BoatHealthLevel", 0); }
-        set { Preffs.SetInt("BoatHealthLevel", value); UpdateParameters(); }
-    }
+    [SerializeField] private ParameterData[] datas;
 
     private void Awake()
     {
@@ -65,16 +18,59 @@ public class PlayerUpdates : MonoBehaviour
             throw new System.Exception();
     }
 
+    private ParameterData GetData(ParameterType type)
+    {
+        foreach(var data in datas)
+        {
+            if (data.type == type)
+                return data;
+        }
+        throw new System.Exception();
+    }
+
+    public ShopValues GetShopValues(ParameterType type)
+    {
+        return GetData(type).GetStruct();
+    }
+
+    public int GetParameterLevel(ParameterType type)
+    {
+        return GetData(type).GetCurrentLevel();
+    }
+
+    public float GetParameterValue( ParameterType type)
+    {
+        var data = GetData(type);
+        return data.GetValue(data.GetCurrentLevel());
+    }
+
+    public bool TryImproveParameter(ParameterType type)
+    {
+        var data = GetData(type);
+        var money = BoatManager.instance.playerMoney;
+        var price = data.GetPrice(data.GetCurrentLevel() + 1);
+        if (money >= price)
+        {
+            data.SetCurrentLevel(data.GetCurrentLevel() + 1);
+            BoatManager.instance.playerMoney -= price;
+            UpdateParameters();
+            print("куплено");
+            return true;
+        }
+        print("не куплено");
+        return false;
+    }
+
     public void UpdateParameters()
     {
-        var power = powerSO.power[powerLevel];
-        var capacity = capacitySO.fishCapacity[capacityLevel];
-        var rodsCount = rodsCountSO.rods[rodsCountLevel];
-        var rodsPerFish = rodsPerFishSO.rodsPerFish[rodsPerFishLevel];
-        var speed = speedSO.boatSpeed[speedLevel];
-        var catchDistance = distanceSO.distance[distanceLevel];
-        var health = healthSO.health[healthLevel];
+        var power = GetData(ParameterType.power).GetValue(GetParameterLevel(ParameterType.power));
+        var capacity = GetData(ParameterType.capacity).GetValue(GetParameterLevel(ParameterType.capacity));
+        var rodsCount = GetData(ParameterType.rodsCount).GetValue(GetParameterLevel(ParameterType.rodsCount));
+        var rodsPerFish = GetData(ParameterType.rodsPerFish).GetValue(GetParameterLevel(ParameterType.rodsPerFish));
+        var speed = GetData(ParameterType.speed).GetValue(GetParameterLevel(ParameterType.speed));
+        var catchDistance = GetData(ParameterType.distance).GetValue(GetParameterLevel(ParameterType.distance));
+        var health = GetData(ParameterType.health).GetValue(GetParameterLevel(ParameterType.health));
 
-        boat.UpdateImprovements(power, capacity, rodsCount, rodsPerFish, speed, catchDistance, health);
+        boat.UpdateImprovements(power, capacity, (int)rodsCount, (int)rodsPerFish, speed, catchDistance, health);
     }
 }
