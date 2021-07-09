@@ -90,6 +90,6 @@ public class BoatFishing : MonoBehaviour
     public void CatchFish(Fish fish)
     {
         BoatManager.instance.AddFish(fish);
-        fish.DestroySelf();
+        fish.gameObject.SetActive(false);
     }
 }

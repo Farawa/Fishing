@@ -26,4 +26,15 @@ public static class Preffs
         PlayerPrefs.SetFloat(key, value);
         PlayerPrefs.Save();
     }
+
+    public static string GetString(string key, string defaultValue = "")
+    {
+        return PlayerPrefs.GetString(key, defaultValue);
+    }
+
+    public static void SetString(string key, string value)
+    {
+        PlayerPrefs.SetString(key, value);
+        PlayerPrefs.Save();
+    }
 }

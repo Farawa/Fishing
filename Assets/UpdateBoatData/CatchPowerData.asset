@@ -27,3 +27,5 @@ MonoBehaviour:
     price: 100
   - value: 50
     price: 100
+  - value: 150
+    price: 100

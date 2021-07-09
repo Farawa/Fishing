@@ -35,13 +35,12 @@ public class Rod : MonoBehaviour
         while (true)
         {
             fish.catchProgress += catchPower * Time.deltaTime;
-            if (fish == null)
+            if (!fish.gameObject.activeSelf)
             {
                 lineRenderer.enabled = false;
                 break;
             }
             var distance = Vector3.Distance(zeroPosition.position, fish.transform.position);
-            distance -= 0.5f;//this is fix magic number :/
             if (distance > maxDistance)
             {
                 fish.pullingRodsCount--;
