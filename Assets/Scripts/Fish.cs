@@ -16,8 +16,8 @@ public class Fish : MonoBehaviour
     [SerializeField] private GameObject progressObject;
 
     private Vector3 areal = Vector3.one;
-    private Vector3 targetPosition = Vector3.zero;
-    private Rigidbody rigidbody;
+    private Vector3 targetPosition = Vector3.zero*3;
+    [SerializeField] private Rigidbody rigidbody;
 
     public int pullingRodsCount
     {
@@ -47,11 +47,6 @@ public class Fish : MonoBehaviour
                 BoatFishing.instance.CatchFish(this);
             }
         }
-    }
-
-    private void Awake()
-    {
-        rigidbody = GetComponent<Rigidbody>();
     }
 
     private void OnEnable()
