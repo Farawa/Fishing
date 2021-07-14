@@ -16,7 +16,7 @@ public class Fish : MonoBehaviour
     [SerializeField] private GameObject progressObject;
 
     private Vector3 areal = Vector3.one;
-    private Vector3 targetPosition = Vector3.zero*3;
+    private Vector3 targetPosition = Vector3.zero;
     [SerializeField] private Rigidbody rigidbody;
 
     public int pullingRodsCount
@@ -83,6 +83,7 @@ public class Fish : MonoBehaviour
         weight = fishWeight;
         speed = fishSpeed;
         areal = fishAreal;
+        targetPosition = GetNewTarget();
     }
 
     private void Move()
