@@ -15,10 +15,9 @@ public class ShopController : MonoBehaviour
         foreach (var type in types)
         {
             var t = Instantiate(componentPrefab, content);
-            var str = PlayerUpdates.instance.GetShopValues(type);
+            var str = PlayerUpgrades.instance.GetShopValues(type);
             t.GetComponent<ShopComponent>().Setup(str);
         }
-
         UpdateContentSize();
     }
 

@@ -21,9 +21,9 @@ public class ShopComponent : MonoBehaviour
 
     private void Click()
     {
-        if (PlayerUpdates.instance.TryImproveParameter(type))
+        if (PlayerUpgrades.instance.TryImproveParameter(type))
         {
-            Setup(PlayerUpdates.instance.GetShopValues(type));
+            Setup(PlayerUpgrades.instance.GetShopValues(type));
         }
     }
 

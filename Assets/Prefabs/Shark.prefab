@@ -465,7 +465,7 @@ GameObject:
   - component: {fileID: 1286047688509689432}
   - component: {fileID: 6323432458012273425}
   - component: {fileID: 2270316193967003883}
-  - component: {fileID: 513328407952939223}
+  - component: {fileID: 2145453903919747149}
   m_Layer: 0
   m_Name: Shark
   m_TagString: Fish
@@ -541,10 +541,11 @@ MonoBehaviour:
   price: 10
   weight: 1
   speed: 3
+  catchProgress: 0
+  isCatched: 0
   progressObject: {fileID: 4068493681383373851}
-  rigidbody: {fileID: 6323432458012273425}
---- !u!65 &513328407952939223
-BoxCollider:
+--- !u!135 &2145453903919747149
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -554,7 +555,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.033, y: 0.033, z: 0.033}
+  m_Radius: 0.021
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2140623592977717526
 GameObject:

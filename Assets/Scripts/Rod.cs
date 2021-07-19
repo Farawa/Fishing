@@ -5,18 +5,14 @@ using UnityEngine;
 public class Rod : MonoBehaviour
 {
     public bool isFree { get; private set; } = true;
-    [SerializeField] private Material lineMaterial;
     [SerializeField] private Transform lineSource;
-    [SerializeField] private float lineWidth = 0.03f;
+    [SerializeField] private Catcher catcher;
     [HideInInspector] public Fish currentFish;
-    private Transform lineTarget;
     private LineRenderer lineRenderer;
-    private Transform zeroPosition;
 
     private void Start()
     {
-        zeroPosition = BoatFishing.instance.transform;
-        CreateLine();
+        lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.enabled = false;
     }
 
@@ -29,49 +25,47 @@ public class Rod : MonoBehaviour
     {
         isFree = false;
         currentFish = fish;
-        lineTarget = fish.transform;
         lineRenderer.enabled = true;
-        fish.pullingRodsCount++;
+        fish.PullRodsCount++;
         while (true)
         {
             fish.catchProgress += catchPower * Time.deltaTime;
-            if (!fish.gameObject.activeSelf)
+            if (!fish.gameObject.activeSelf || !catcher.IsCanCatch(fish))
             {
-                lineRenderer.enabled = false;
                 break;
             }
-            var distance = Vector3.Distance(zeroPosition.position, fish.transform.position);
+            if (fish.catchProgress >= fish.health&&!fish.isCatched)
+            {
+                fish.isCatched = true;
+                catcher.GotFish(fish);
+                if(fish==null)
+                {
+                    yield return new WaitForSeconds(1);
+                    continue;
+                }
+                break;
+            }
+            var distance = Vector3.Distance(lineSource.position, fish.transform.position);
             if (distance > maxDistance)
             {
-                fish.pullingRodsCount--;
-                lineRenderer.enabled = false;
+                fish.PullRodsCount--;
                 break;
             }
             lineRenderer.SetPosition(0, lineSource.position);
-            lineRenderer.SetPosition(1, lineTarget.position);
+            lineRenderer.SetPosition(1, fish.transform.position);
             yield return null;
         }
+        lineRenderer.enabled = false;
         isFree = true;
         currentFish = null;
     }
 
     public void StopPull()
     {
-        currentFish.pullingRodsCount--;
+        currentFish.PullRodsCount--;
         lineRenderer.enabled = false;
         isFree = true;
         currentFish = null;
         StopAllCoroutines();
-    }
-
-    private void CreateLine()
-    {
-        lineRenderer = gameObject.AddComponent<LineRenderer>();
-        lineRenderer.material = lineMaterial;
-        lineRenderer.positionCount = 2;
-        lineRenderer.startWidth = lineWidth;
-        lineRenderer.endWidth = lineWidth;
-        lineRenderer.useWorldSpace = true;
-        lineRenderer.numCapVertices = 5;
     }
 }

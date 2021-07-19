@@ -6,5 +6,10 @@ public enum ParameterType
     rodsPerFish,
     speed,
     distance,
-    health
+    health,
+    catchersCount,
+    catchersPower,
+    deliversCount,
+    deliversCargo,
+
 }

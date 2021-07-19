@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Fish : MonoBehaviour
@@ -10,21 +7,18 @@ public class Fish : MonoBehaviour
     public float weight = 1f;
     public float speed = 3f;
 
-    private int pullRodsCount = 0;
-    private bool isCatched = false;
-    private float progress = 0;
-    [SerializeField] private GameObject progressObject;
+    public float catchProgress;
+    public bool isCatched = false;
 
+    [SerializeField] private GameObject progressObject;
+    private int pullRodsCount = 0;
+    private Rigidbody rigidbody;
     private Vector3 areal = Vector3.one;
     private Vector3 targetPosition = Vector3.zero;
-    [SerializeField] private Rigidbody rigidbody;
 
-    public int pullingRodsCount
+    public int PullRodsCount
     {
-        get
-        {
-            return pullRodsCount;
-        }
+        get => pullRodsCount;
         set
         {
             pullRodsCount = value;
@@ -32,27 +26,16 @@ public class Fish : MonoBehaviour
                 catchProgress = 0;
         }
     }
-    public float catchProgress
+
+    private void Awake()
     {
-        get
-        {
-            return progress;
-        }
-        set
-        {
-            progress = value;
-            if (progress >= health && !isCatched)
-            {
-                isCatched = true;
-                BoatFishing.instance.CatchFish(this);
-            }
-        }
+        rigidbody = GetComponent<Rigidbody>();
     }
 
     private void OnEnable()
     {
         isCatched = false;
-        pullingRodsCount = 0;
+        PullRodsCount = 0;
         catchProgress = 0;
     }
 
@@ -70,7 +53,7 @@ public class Fish : MonoBehaviour
         }
         CheckDestination();
         Move();
-        if (pullRodsCount != 0)
+        if (PullRodsCount != 0)
             progressObject.SetActive(true);
         else
             progressObject.SetActive(false);

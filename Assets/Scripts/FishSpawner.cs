@@ -83,6 +83,18 @@ public class FishSpawner : MonoBehaviour
             PlaceFish(1);
             lastSpawnDate = DateTime.Now;
         }
+        
+    }
+
+    public int GetActiveFishCount()
+    {
+        int count = 0;
+        foreach(var fish in fishList)
+        {
+            if (fish.activeSelf)
+                count++;
+        }
+        return count;
     }
 
     private void OnDestroy()
@@ -132,5 +144,19 @@ public class FishSpawner : MonoBehaviour
                 count++;
         }
         return count;
+    }
+
+    public Fish GetFreeFish()
+    {
+        foreach(var fish in fishList)
+        {
+            if (fish.activeSelf)
+            {
+                var t = fish.GetComponent<Fish>();
+                if (t.PullRodsCount == 0)
+                    return t;
+            }
+        }
+        return null;
     }
 }

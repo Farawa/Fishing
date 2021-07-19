@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,9 +14,9 @@ public class InterfaceUpdater : MonoBehaviour
     {
         var currentCapacity = BoatStorage.instance.currentWeight;
         var fishCost = BoatStorage.instance.moneyCost;
-        var maxCapacity = BoatManager.instance.maxFishCapacity;
+        var maxCapacity = BoatManager.instance.MaxFishCapacity;
         var currentMoney = BoatManager.instance.playerMoney;
-        var maxHealth = BoatManager.instance.maxHealth;
+        var maxHealth = BoatManager.instance.MaxHealth;
         var currentHealth = BoatManager.instance.currentHealth;
 
         capacityText.text = currentCapacity + "/" + maxCapacity;

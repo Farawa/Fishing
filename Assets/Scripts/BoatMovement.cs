@@ -5,7 +5,6 @@ using UnityEngine;
 public class BoatMovement : MonoBehaviour
 {
     private Rigidbody boatRigidbody;
-    public float speed { get { return BoatManager.instance.boatSpeed; } }
 
     private void Awake()
     {
@@ -23,7 +22,7 @@ public class BoatMovement : MonoBehaviour
         var vertical = Input.GetAxis("Vertical");
         var horizontal = Input.GetAxis("Horizontal");
         if (vertical == 0 && horizontal == 0) return;
-        var vector = new Vector3(horizontal, 0, vertical) * speed;
+        var vector = new Vector3(horizontal, 0, vertical) * BoatManager.instance.BoatSpeed;
         boatRigidbody.transform.LookAt(boatRigidbody.position + vector.normalized);
     }
 
@@ -34,6 +33,6 @@ public class BoatMovement : MonoBehaviour
 
         var vector = new Vector3(horizontal, 0, vertical).normalized;
 
-        boatRigidbody.velocity = vector * speed;
+        boatRigidbody.velocity = vector * BoatManager.instance.BoatSpeed;
     }
 }
