@@ -8,10 +8,11 @@ public class ShopController : MonoBehaviour
     [SerializeField] private RectTransform content;
     [SerializeField] private GameObject componentPrefab;
 
+    private int oldChildCount = 0;
+
     public void SetupShop(ParameterType[] types)
     {
         ClearContent();
-
         foreach (var type in types)
         {
             var t = Instantiate(componentPrefab, content);
@@ -27,6 +28,7 @@ public class ShopController : MonoBehaviour
         for (int i = content.childCount - 1; i >= 0; i--)
         {
             Destroy(content.GetChild(i).gameObject);
+            oldChildCount++;
         }
     }
 
@@ -34,7 +36,9 @@ public class ShopController : MonoBehaviour
     {
         var grid = content.GetComponent<GridLayoutGroup>();
         var size = content.sizeDelta;
-        size.y = grid.padding.top + grid.padding.bottom + grid.cellSize.y * content.childCount + grid.spacing.y * (content.childCount - 1);
+        var child = content.childCount - oldChildCount;
+        size.y = grid.padding.top + grid.padding.bottom + grid.cellSize.y * child + grid.spacing.y * (child - 1);
         content.sizeDelta = size;
+        oldChildCount = 0;
     }
 }

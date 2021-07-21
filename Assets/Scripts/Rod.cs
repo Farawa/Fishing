@@ -34,15 +34,10 @@ public class Rod : MonoBehaviour
             {
                 break;
             }
-            if (fish.catchProgress >= fish.health&&!fish.isCatched)
+            if (fish.catchProgress >= fish.health && !fish.isCatched)
             {
                 fish.isCatched = true;
                 catcher.GotFish(fish);
-                if(fish==null)
-                {
-                    yield return new WaitForSeconds(1);
-                    continue;
-                }
                 break;
             }
             var distance = Vector3.Distance(lineSource.position, fish.transform.position);
@@ -55,13 +50,12 @@ public class Rod : MonoBehaviour
             lineRenderer.SetPosition(1, fish.transform.position);
             yield return null;
         }
-        lineRenderer.enabled = false;
-        isFree = true;
-        currentFish = null;
+        StopPull();
     }
 
     public void StopPull()
     {
+        if (isFree||!gameObject.activeSelf) return;
         currentFish.PullRodsCount--;
         lineRenderer.enabled = false;
         isFree = true;
